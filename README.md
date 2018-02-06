@@ -1,4 +1,4 @@
-# CustomDataAuthenticationTickets
+# Storing Custom Data in Forms Authentication Tickets
 
 base on this article : http://www.danharman.net/2011/07/07/storing-custom-data-in-forms-authentication-tickets/
 
