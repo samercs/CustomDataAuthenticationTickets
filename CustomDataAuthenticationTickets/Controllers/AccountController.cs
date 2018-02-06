@@ -5,10 +5,13 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
+using CustomDataAuthenticationTickets.Core.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using CustomDataAuthenticationTickets.Models;
+using Newtonsoft.Json;
 
 namespace CustomDataAuthenticationTickets.Controllers
 {
@@ -79,6 +82,19 @@ namespace CustomDataAuthenticationTickets.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    var cookie = FormsAuthentication.GetAuthCookie(model.Email, model.RememberMe);
+                    var ticket = FormsAuthentication.Decrypt(cookie.Value);
+                    var userData = new UserData()
+                    {
+                        FirstName = "Samer",
+                        LastName = "Alkhatib"
+                    };
+                    var userDataJson = JsonConvert.SerializeObject(userData);
+                    var newTicket = new FormsAuthenticationTicket(ticket.Version, ticket.Name, ticket.IssueDate, ticket.Expiration,
+                        ticket.IsPersistent, userDataJson, ticket.CookiePath);
+                    var encTicket = FormsAuthentication.Encrypt(newTicket);
+                    cookie.Value = encTicket;
+                    Response.Cookies.Add(cookie);
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");

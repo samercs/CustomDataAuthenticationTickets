@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using CustomDataAuthenticationTickets.Core.Binder;
+using CustomDataAuthenticationTickets.Core.Model;
 
 namespace CustomDataAuthenticationTickets
 {
@@ -16,6 +18,7 @@ namespace CustomDataAuthenticationTickets
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            ModelBinders.Binders.Add(typeof(UserData), new UserDataModelBinder<UserData>());
         }
     }
 }
